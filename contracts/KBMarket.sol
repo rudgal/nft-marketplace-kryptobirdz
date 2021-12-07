@@ -19,7 +19,7 @@ contract KBMarget is ReentrancyGuard {
     // arrays need to know the length>
 
     Counters.Counter private _tokenIds;
-    Counters.Counter private _tokenSold;
+    Counters.Counter private _tokensSold;
 
     // determine who is the owner of the contract
     // charge a listing fee so the owner makes a commission
@@ -96,16 +96,60 @@ contract KBMarget is ReentrancyGuard {
 
         // NFT transaction
         IERC721(nftContract).transferFrom(msg.sender, address(this), tokenId);
-        
+
         emit MarketTokenMinted(
-        itemId,
-        nftContract,
-        tokenId,
-        msg.sender,
-        address(0),
-        price,
-        false
-    );
-    
+            itemId,
+            nftContract,
+            tokenId,
+            msg.sender,
+            address(0),
+            price,
+            false
+        );
+    }
+
+    // function to conduct transactions and market sales
+    function createMarketSale(address nftContract, uint256 itemId)
+        public
+        payable
+        nonReentrant
+    {
+        uint256 price = idToMarketToken[itemId].price;
+        uint256 tokenId = idToMarketToken[itemId].tokenId;
+        require(
+            msg.value == price,
+            "Please submit the asking price in order to continue"
+        );
+
+        // transfer the amount to the seller
+        idToMarketToken[itemId].seller.transfer(msg.value);
+        // transfer the token from contract address to the buyer
+        IERC721(nftContract).transferFrom(address(this), msg.sender, tokenId);
+        idToMarketToken[itemId].owner = payable(msg.sender);
+        idToMarketToken[itemId].sold = true;
+        _tokensSold.increment();
+
+        payable(owner).transfer(listingPrice);
+    }
+
+    // function to fetchMarketItems - minting, buying and selling
+    // return the number of unsold items
+
+    function fetchMarketTokens() public view returns (MarketToken[] memory) {
+        uint256 itemCount = _tokenIds.current();
+        uint256 unsoldItemCount = _tokenIds.current() - _tokensSold.current();
+        uint256 currentIndex = 0;
+
+        // looping over the number of items created (if number has not been sold populate the array)
+        MarketToken[] memory items = new MarketToken[](unsoldItemCount);
+        for (uint256 i = 0; i < itemCount; i++) {
+            if (idToMarketToken[i + 1].owner == address(0)) {
+                uint256 currentId = i + 1;
+                MarketToken storage currentItem = idToMarketToken[currentId];
+                items[currentIndex] = currentItem;
+                currentIndex += 1;
+            }
+        }
+        return items;
     }
 }
