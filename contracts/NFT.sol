@@ -3,9 +3,9 @@ pragma solidity ^0.8.4;
 
 // we will bring in the openzeppelin ERC721 NFT functionality
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
+import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
+import '@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol';
+import '@openzeppelin/contracts/utils/Counters.sol';
 
 contract NFT is ERC721URIStorage {
     using Counters for Counters.Counter;
@@ -18,7 +18,7 @@ contract NFT is ERC721URIStorage {
     // set ApprovalForAll allows us to do that with contract address
 
     // constructor set up our address
-    constructor(address marketplaceAddress) ERC721("KryptoBirdz", "KBIRDS") {
+    constructor(address marketplaceAddress) ERC721('KryptoBirdz', 'KBIRDZ') {
         contractAddress = marketplaceAddress;
     }
 

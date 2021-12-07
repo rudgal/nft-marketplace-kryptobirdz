@@ -3,15 +3,13 @@ pragma solidity ^0.8.4;
 
 // we will bring in the openzeppelin ERC721 NFT functionality
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
-
+import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
+import '@openzeppelin/contracts/security/ReentrancyGuard.sol';
+import '@openzeppelin/contracts/utils/Counters.sol';
 // security against transactions for multiple requests
+import 'hardhat/console.sol';
 
-import "hardhat/console.sol";
-
-contract KBMarget is ReentrancyGuard {
+contract KBMarket is ReentrancyGuard {
     using Counters for Counters.Counter;
 
     // number of items minting, number of transactions, tokens that have not been sold
@@ -31,7 +29,7 @@ contract KBMarget is ReentrancyGuard {
     uint256 listingPrice = 0.045 ether;
 
     constructor() {
-        // set the ownder
+        // set the owner
         owner = payable(msg.sender);
     }
 
@@ -60,7 +58,7 @@ contract KBMarget is ReentrancyGuard {
         bool sold
     );
 
-    // get the listing prie
+    // get the listing price
     function getListingPrice() public view returns (uint256) {
         return listingPrice;
     }
@@ -75,11 +73,10 @@ contract KBMarget is ReentrancyGuard {
         uint256 price
     ) public payable nonReentrant {
         // nonReentrant is a modifier to prevent reentry attack
-        require(price > 0, "Price must be at least one wei");
-        require(
-            msg.value == listingPrice,
-            "Price must be equal to listing price"
-        );
+
+        require(price > 0, 'Price must be at least one wei');
+        require(msg.value == listingPrice, 'Price must be equal to listing price');
+
         _tokenIds.increment();
         uint256 itemId = _tokenIds.current();
 
@@ -109,17 +106,14 @@ contract KBMarget is ReentrancyGuard {
     }
 
     // function to conduct transactions and market sales
-    function createMarketSale(address nftContract, uint256 itemId)
-        public
-        payable
-        nonReentrant
-    {
+
+    function createMarketSale(
+        address nftContract,
+        uint itemId)
+    public payable nonReentrant {
         uint256 price = idToMarketToken[itemId].price;
         uint256 tokenId = idToMarketToken[itemId].tokenId;
-        require(
-            msg.value == price,
-            "Please submit the asking price in order to continue"
-        );
+        require(msg.value == price, 'Please submit the asking price in order to continue');
 
         // transfer the amount to the seller
         idToMarketToken[itemId].seller.transfer(msg.value);
@@ -200,7 +194,6 @@ contract KBMarget is ReentrancyGuard {
         for (uint256 i = 0; i < totalItemCount; i++) {
             if (idToMarketToken[i + 1].seller == msg.sender) {
                 uint256 currentId = idToMarketToken[i + 1].itemId;
-                // current array
                 MarketToken storage currentItem = idToMarketToken[currentId];
                 items[currentIndex] = currentItem;
                 currentIndex += 1;
