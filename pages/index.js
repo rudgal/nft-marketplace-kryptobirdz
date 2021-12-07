@@ -1,3 +1,3 @@
 export default function Home() {
-  return <div>KRYPTOBIRDZ MARKETPLACE</div>;
+  return <div></div>;
 }
