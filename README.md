@@ -4,7 +4,7 @@ This is the course project to the Udemy Course [Build An NFT Marketplace From Sc
 
 Requires a `sensitive-data.js` with following constants in root folder:
 
-```
+```js
 module.exports = {
   PROJECT_ID: 'put your infura project id here',
   PRIVATE_KEY: 'put your metamask account private key here',
