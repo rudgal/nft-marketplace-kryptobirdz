@@ -81,16 +81,19 @@ export default function MintItem() {
         <input
           placeholder="Asset Name"
           className="mt-8 border rounded p-4"
+          autoComplete="true"
           onChange={(e) => updateFormInput({ ...formInput, name: e.target.value })}
         />
         <textarea
           placeholder="Asset Description"
           className="mt-2 border rounded p-4"
+          autoComplete="true"
           onChange={(e) => updateFormInput({ ...formInput, description: e.target.value })}
         />
         <input
           placeholder="Asset Price in eth"
           className="mt-2 border rounded p-4"
+          autoComplete="true"
           onChange={(e) => updateFormInput({ ...formInput, price: e.target.value })}
         />
         <input type="file" placeholder="Asset" className="mt-4" onChange={onChange} />

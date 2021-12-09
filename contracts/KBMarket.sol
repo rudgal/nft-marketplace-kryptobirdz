@@ -189,7 +189,7 @@ contract KBMarket is ReentrancyGuard {
         }
 
         // second loop to loop through the amount you have purchased with itemCount
-        // check to see if the ownder address is equal to msg.sender
+        // check to see if the owner address is equal to msg.sender
         MarketToken[] memory items = new MarketToken[](itemCount);
         for (uint256 i = 0; i < totalItemCount; i++) {
             if (idToMarketToken[i + 1].seller == msg.sender) {

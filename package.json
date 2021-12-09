@@ -6,6 +6,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "hardhat-test": "hardhat test",
     "hardhat-node": "hardhat node",
     "hardhat-deploy": "hardhat run scripts/deploy.js --network localhost"
   },
