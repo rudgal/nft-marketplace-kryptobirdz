@@ -10,21 +10,21 @@ import { useRouter } from 'next/router';
 
 // in this component we set the ipfs up to host our nft data of file storage
 
-const client = ipfsHttpClient('https://ipfs.infura.io/5001/api/v0');
+const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0');
 
 export default function MintItem() {
   const [fileUrl, setFileUrl] = useState(null);
   const [formInput, updateFormInput] = useState({ price: '', name: '', description: '' });
   const router = useRouter();
 
-  // set uo a function to fireoff when we update files in our form - we cann add our NFT immages - IPFS
+  // set up a function to fireoff when we update files in our form - we can add our NFT images - IPFS
   async function onChange(e) {
     const file = e.target.files[0];
     try {
       const added = await client.add(file, {
         progress: (prog) => console.log(`received: ${prog}`),
       });
-      const url = `https://ipfs.infura.io/5001/api/v0/${added.path}`;
+      const url = `https://ipfs.infura.io/ipfs/${added.path}`;
       setFileUrl(url);
     } catch (error) {
       console.log('Error uploading file:', error);
@@ -41,9 +41,9 @@ export default function MintItem() {
 
     try {
       const added = await client.add(data);
-      const url = `https://ipfs.infura.io/5001/api/v0/${added.path}`;
+      const url = `https://ipfs.infura.io/ipfs/${added.path}`;
       // run a function that created sale and passes in hte url
-      createSale();
+      createSale(url);
     } catch (error) {
       console.log('Error uploading file:', error);
     }
